@@ -18,6 +18,7 @@ make149: true
 ---
 
 ```{r setup, include=FALSE}
+# fig.align = "center" as a knitr option does not work. Must be included in each chunk.
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
@@ -35,21 +36,23 @@ palette1 = "Set1"
 ```
 
 
-## Data exploration
+# Data
+
+## Introduce the data
 
 ### The sitcom
 
-We're going to explore data from a famous U.S. sitcom that aired from 2005 to 2013. Any guesses?
+We're going to explore data from a well-known U.S. sitcom that aired from 2005 to 2013. Any guesses?
 
 \pause
 
-```{r shows_posters, out.height="60%", fig.show="hold", fig.align="center"}
+```{r shows_posters, out.height="70%", fig.show="hold", fig.align="center"}
 knitr::include_graphics('i2_office_poster.jpg')
 ```
 
 ### The data
 
-Our data come from the [\textcolor{blue}{The Office Episodes Data}](https://www.kaggle.com/datasets/bcruise/the-office-episodes-data) which is available on Kaggle. The data were read in as a data frame into `R` for analysis. Let's take a look at the columns we have available to work with.
+Our data come from the [\textcolor{blue}{The Office Episodes Data}](https://www.kaggle.com/datasets/bcruise/the-office-episodes-data) which is available on Kaggle. The data were read into `R` as a data frame. Let's take a look at the columns available for analysis.
 
 \pause
 
@@ -67,6 +70,13 @@ str(dat, vec.len = 1.4, nchar.max = 96)
 ```
 
 \normalsize
+
+### Data familiarity
+
+It's appropriate to familiarize oneself with the data before embarking on any kind of analysis. As such, we would be wise to do some eyes-on data familiarization by watching  [\textcolor{blue}{a short clip}](https://www.yout-ube.com/watch?v=gO8N3L_aERg) from a representative episode of *The Office*.  
+
+
+## View the data
 
 ### U.S. viewership per episode
 
@@ -94,8 +104,150 @@ ggplot(data = dat) +
   labs(
     x = "Episode air date\n",
   ) +
-  scale_y_continuous(name="Episode viewership", labels = comma) +
+  scale_y_continuous(name="IMDB avg rating", labels = comma) +
   theme(legend.position="right", 
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        legend.title = element_text(size = 18, face = "bold"),
+        legend.text = element_text(size = 16))
+```
+
+# Bootstrap methods with IMDB ratings
+
+### Exploring IMDB ratings further
+
+Suppose IMDB avg ratings were our benchmark for episode quality or performance. We'll use these ratings as our variable of interest for today's examples. First, let's take a look at the distribution of IMDB avg ratings.
+
+\tiny
+```{r summary()}
+# summary(dat$imdb_rating)
+```
+\normalsize
+
+```{r ratings_histogram, fig.width = 10, fig.height = 4, fig.align = "center"}
+# Plot histogram
+ggplot(data = dat) +
+  geom_histogram(aes(x = imdb_rating), col = "black", fill = "steel blue", breaks = seq(from = 6, to = 10, by = 0.25)) +
+  geom_vline(aes(xintercept = mean(dat$imdb_rating), color = "mean"), size = 1.5) +
+  labs(
+    x = "IMDB avg rating",
+    y = "Number of episodes",
+    caption = "Notice the red line represents an average of averages."
+  ) +
+  scale_color_manual(name = NULL, values = c(mean = "tomato"), labels = c("Mean")) +
+  theme(axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        legend.title = element_text(size = 18, face = "bold"),
+        legend.text = element_text(size = 16))
+```
+
+### Some throat clearing
+It's worth addressing a few peculiarities about doing statistical inference on the average IMDB ratings. Before I share my concerns, what concerns would you have about doing statistical inference on this data?
+\newline
+
+\pause
+|   1. We're working with a population dataset. 
+|           *What value is there in doing inference with population data?*
+|   2. Each observation is itself an average. 
+|           *What would it mean to build a confidence interval for, say, the mean*
+|           *value of average IMDB ratings?*
+|   3. The observations are not independent. 
+|           *To what degree might this degrade our analysis?*
+
+
+### Checking independence of observations
+```{r independence, fig.align="center", fig.height = 6, fig.width = 10}
+# Build data frame
+indy = data.frame(Rating = dat$imdb_rating[-1], Previous = dat$imdb_rating[-188])
+
+# Compute correlation
+indy_cor = with(indy, round(cor(Rating, Previous),3))
+
+# Create plot
+ggplot(data = indy) +
+  geom_point(aes(x = Rating, y= Previous), fill = "steel blue", shape = 21, size = 3, alpha = 0.75) +
+  scale_fill_brewer(palette = palette1) +
+  labs(
+    x = "Episode rating",
+    y = "Previous episode rating",
+    title = bquote("Correlation between episode rating and previous episode rating is" ~ .(indy_cor) * ".")
+  ) +
+  theme(legend.position="right", 
+        title = element_text(size = 16, face = "bold"),
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        legend.title = element_text(size = 18, face = "bold"),
+        legend.text = element_text(size = 16))
+```
+
+## Bootstrap confidence intervals
+
+### Confidence interval for the mean
+
+Suppose we wish to build a 95% confidence interval for the mean value of our parameter of interest. Let's introduce some terms.
+
+- Let $n=188$ be the number of episodes.
+- Let $x_i$ be the average IMDB rating of episode $i$ for $i=1,...,n$.
+- Let $\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$ be the sample mean of the average IMDB ratings.
+- Let $\mu_x$ be the population mean of the IMDB average ratings (think multiverse).
+
+Then we wish to compute an interval $\left[b_{\text{lower}}, b_{\text{upper}}\right]$ such that
+$$
+\text{P}\left(b_{\text{lower}} \le \mu_x \le b_{\text{upper}} \right) = 0.95.
+$$
+
+### Computing it the traditional way
+
+In your intro to statistics course, you learned how we can leverage the Central Limit Theorem to compute this confidence interval. Assuming we have 
+
+- Random samples
+- Independent samples
+- Sufficiently large sample size (relative to the population size)
+- Sufficiently large sample size (relative to the population distribution)
+
+\pause
+then $\bar{x}$ is distributed $\text{Normal}\left(\mu_x, \frac{\sigma_x}{\sqrt{n}} \right)$, where $\sigma_x$ is the population standard deviation of $x$. We can compute our 95% confidence interval for $\mu_x$ as follows.
+
+$$
+\left[b_{\text{lower}}, b_{\text{upper}}\right] \approx \bar{x} \pm z_{0.975}\frac{s_x}{\sqrt{n}} 
+$$
+where $z_{0.975}$ is the 97.5th quantile of a standard normal distribution, and $s_x$ is the sample standard deviation of $x$.
+
+### Computing it the traditional way
+
+According to our CLT-based calculations, we can be 95% confident that $\mu_x$, the population mean of the IMDB average ratings, is contained in the interval
+
+$$
+\left[ b_\text{lower}, b_\text{upper} \right] \approx \bar{x} \pm z_{0.975}\frac{s_x}{\sqrt{n}} \approx \left[ 8.131, 8.307 \right].
+$$
+
+
+```{r ci_trad, fig.align = "center", fig.height = 4, fig.width = 10}
+# Compute statistics
+xbar = mean(dat$imdb_rating)
+s = sd(dat$imdb_rating)
+n = nrow(dat)
+LB = qnorm(p = 0.025, mean = xbar, sd = s/sqrt(n))
+UB = qnorm(p = 0.975, mean = xbar, sd = s/sqrt(n))
+
+# Create data frame
+x_norm = seq(from = xbar - 4 * s/sqrt(n), to = xbar + 4 * s/sqrt(n), by = 0.001)
+y_norm = dnorm(x_norm, mean = xbar, sd = s/sqrt(n))
+dat_norm = data.frame(x_norm, y_norm)
+
+# Create plot
+ggplot(data = dat_norm, aes(x = x_norm, y = y_norm)) + 
+  geom_line(col = "steel blue", size = 1.5) +
+  geom_area(fill = "steel blue", alpha = 0.5) +
+  labs(x = bquote(mu[x]),
+    y = "Likelihood",
+    title = expression( paste("Normal", bgroup("(", bar(x) *  "," ~ frac(s[x], sqrt(n)), ")" ), " based on IMDB average ratings" ))
+  ) +
+  geom_vline(aes(xintercept = LB), col = "tomato", size = 1.5, linetype = "dashed") +
+  geom_vline(aes(xintercept = UB, col = "CI"), size = 1.5, linetype = "dashed") +
+  scale_color_manual(name = NULL, values = c(CI = "tomato"), labels = c("CI bounds")) +
+  theme(legend.position="none", 
+        title = element_text(size = 16, face = "bold"),
         axis.text=element_text(size=16),
         axis.title=element_text(size=18,face="bold"),
         legend.title = element_text(size = 18, face = "bold"),
@@ -104,3 +256,17 @@ ggplot(data = dat) +
 
 
 
+## Permutation tests for comparing groups 
+
+## Standard error approximation
+
+# Conclusion
+
+## Pros and cons of bootstrap methods
+## Bootstrapping in ATARI
+
+## Questions
+
+\begin{center}
+\huge What questions do you have?
+\end{center}
