@@ -23,33 +23,38 @@ library(GGally)
 library(SentimentAnalysis)
 ```
 
+```{r color_options}
+color1 = "blue"
+palette1 = "Set1"
+```
+
+
 # Data exploration
 
 ## Two TV shows
 
-We're going to explore data from two famous U.S. sitcoms that together aired from 1994 to 2013. Any guesses?
+We're going to explore data from a famous U.S. sitcom that aired from 2005 to 2013. Any guesses?
 
 \pause
 
 ```{r shows_posters, out.height="60%", fig.show="hold", fig.align="center"}
-knitr::include_graphics('i1_friends_poster.jpg')
 knitr::include_graphics('i2_office_poster.jpg')
 ```
 
 ## The data
 
-Our data come from the [\textcolor{blue}{Friends Series Dataset}](https://www.kaggle.com/datasets/rezaghari/friends-series-dataset) and [\textcolor{blue}{The Office Episodes Data}](https://www.kaggle.com/datasets/bcruise/the-office-episodes-data) both available on Kaggle. The data were combined into a `.csv` then read in as a data frame in `R` for analysis. Let's take a look at the columns we have available to analyze.
+Our data come from the [\textcolor{blue}{The Office Episodes Data}](https://www.kaggle.com/datasets/bcruise/the-office-episodes-data) which is available on Kaggle. The data were read in as a data frame into `R` for analysis. Let's take a look at the columns we have available to work with.
 
 \pause
 
 \tiny
 ```{r load_data}
 # Load data
-dat = read.csv("friends_and_the_office.csv")
+dat = read.csv("office.csv")
 
 # Convert variable types
-dat$show = as.factor(dat$show)
 dat$air_date = as.Date(dat$air_date, "%m/%d/%y")
+dat$season = as.factor(dat$season)
 
 # Show data structure
 str(dat, vec.len = 1.2, nchar.max = 64)
@@ -61,28 +66,13 @@ str(dat, vec.len = 1.2, nchar.max = 64)
 
 ```{r viewership, fig.height=6, fig.width = 10}
 ggplot(data = dat) +
-  geom_point(aes(x = air_date, y = us_viewers, col = show), size = 2) +
+  geom_point(aes(x = air_date, y = us_viewers, fill = season), shape = 21, size = 3, alpha = 0.75) +
+  scale_fill_brewer(palette = palette1) +
   labs(
     x = "Episode air date\n",
   ) +
   scale_y_continuous(name="Episode viewership", labels = comma) +
-  theme(legend.position="top", 
-        axis.text=element_text(size=16),
-        axis.title=element_text(size=18,face="bold"),
-        legend.title = element_text(size = 18, face = "bold"),
-        legend.text = element_text(size = 16))
-```
-
-## Number of IMDB votes per episode
-
-```{r num_votes, fig.height=6, fig.width = 10}
-ggplot(data = dat) +
-  geom_point(aes(x = air_date, y = total_votes, col = show), size = 2) +
-  labs(
-    x = "Episode air date\n",
-  ) +
-  scale_y_continuous(name="Episode votes", labels = comma) +
-  theme(legend.position="top", 
+  theme(legend.position="right", 
         axis.text=element_text(size=16),
         axis.title=element_text(size=18,face="bold"),
         legend.title = element_text(size = 18, face = "bold"),
@@ -93,12 +83,13 @@ ggplot(data = dat) +
 
 ```{r imdb_rating, fig.height=6, fig.width = 10}
 ggplot(data = dat) +
-  geom_point(aes(x = air_date, y = imdb_rating, col = show), size = 2) +
+  geom_point(aes(x = air_date, y = imdb_rating, fill = season), shape = 21, size = 3, alpha = 0.75) +
+  scale_fill_brewer(palette = palette1) +
   labs(
     x = "Episode air date\n",
   ) +
-  scale_y_continuous(name="Episode avg IMDB rating", labels = comma) +
-  theme(legend.position="top", 
+  scale_y_continuous(name="Episode viewership", labels = comma) +
+  theme(legend.position="right", 
         axis.text=element_text(size=16),
         axis.title=element_text(size=18,face="bold"),
         legend.title = element_text(size = 18, face = "bold"),
@@ -106,250 +97,4 @@ ggplot(data = dat) +
 ```
 
 
-## Relationships between viewership, votes, and ratings
-
-```{r pairs_plot, fig.height=6, fig.width = 10}
-ggpairs(data = dat, columns = c(5, 7, 8), 
-        aes(color = show, alpha = 0.5), size = 2, 
-        upper = list(continuous = "points"),
-        columnLabels = c("U.S. episode viewership", "Average IMDB rating", "Number of IMDB ratings")) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-# Statistical analysis
-
-## Sandbox total IMDB
-```{r, fig.height=6, fig.width = 10}
-# Add column
-dat$total_imdb_points = with(dat, imdb_rating * total_votes)
-
-# Create plot
-ggplot(data = dat) +
-  geom_point(aes(x = air_date, y = total_imdb_points, col = show), size = 2) +
-  labs(
-    x = "Episode air date\n",
-  ) +
-  scale_y_continuous(name="Total IMDB rating points", labels = comma) +
-  theme(legend.position="top", 
-        axis.text=element_text(size=16),
-        axis.title=element_text(size=18,face="bold"),
-        legend.title = element_text(size = 18, face = "bold"),
-        legend.text = element_text(size = 16))
-```
-
-## Sandbox total IMDB
-
-```{r, fig.height=6, fig.width = 10}
-ggplot(data = dat, aes(x = total_imdb_points, fill = show)) +
-  geom_density(alpha = 0.7) +
-  labs(
-    y = "Density"
-  ) +
-  scale_x_continuous(name="Total IMDB rating points", labels = comma) +
-  theme(legend.position="top", 
-        axis.text=element_text(size=16),
-        axis.title=element_text(size=18,face="bold"),
-        legend.title = element_text(size = 18, face = "bold"),
-        legend.text = element_text(size = 16))
-```
-
-## Sandbox pairs
-```{r pairs_plot_2, fig.height=6, fig.width = 10}
-ggpairs(data = dat, columns = c(7, 8, 10), 
-        aes(color = show, alpha = 0.5), size = 2, 
-        upper = list(continuous = "points"),
-        columnLabels = c("Average IMDB rating", "Number of IMDB ratings", "Total IMDB rating points")) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-## Sandbox description 
-
-```{r, fig.height=6, fig.width = 10}
-dat$des_length = nchar(dat$description)
-
-# Create plot
-ggplot(data = dat) +
-  geom_point(aes(x = air_date, y = des_length, col = show), size = 2) +
-  labs(
-    x = "Episode air date\n",
-  ) +
-  scale_y_continuous(name="Character length of episode description", labels = comma) +
-  theme(legend.position="top", 
-        axis.text=element_text(size=16),
-        axis.title=element_text(size=18,face="bold"),
-        legend.title = element_text(size = 18, face = "bold"),
-        legend.text = element_text(size = 16))
-```
-
-
-## Sandbox description pairs
-```{r pairs_plot_3, fig.height=6, fig.width = 10}
-ggpairs(data = dat, columns = c(7, 8, 11), 
-        aes(color = show, alpha = 0.5), size = 2, 
-        upper = list(continuous = "points"),
-        columnLabels = c("Average IMDB rating", "Number of IMDB ratings", "Episode description length")) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-## Sandbox description 
-
-```{r, fig.height=6, fig.width = 10}
-# Build sentiment model
-sentiment = analyzeSentiment(dat$description)
-dat$sentiment = sentiment$SentimentGI
-
-# Create plot
-ggplot(data = dat) +
-  geom_point(aes(x = air_date, y = sentiment, col = show), size = 2) +
-  labs(
-    x = "Episode air date\n",
-  ) +
-  scale_y_continuous(name="Sentiment score", labels = comma) +
-  theme(legend.position="top", 
-        axis.text=element_text(size=16),
-        axis.title=element_text(size=18,face="bold"),
-        legend.title = element_text(size = 18, face = "bold"),
-        legend.text = element_text(size = 16))
-```
-
-## Sandbox sentiment score
-```{r, fig.height=6, fig.width = 10}
-ggpairs(data = dat, columns = c(7, 8, 12), 
-        aes(color = show, alpha = 0.5), size = 2, 
-        upper = list(continuous = "points"),
-        columnLabels = c("Average IMDB rating", "Number of IMDB ratings", "Sentiment score")) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-
-## Linear model
-```{r}
-samod = lm(imdb_rating ~ sentiment, data = dat)
-summary(samod)
-dat[which.max(dat$sentiment), 9]
-dat[which.min(dat$sentiment), 9]
-```
-
-```{r}
-ggpairs(data = office, columns = c(7,11:13), 
-        aes(alpha = 0.5), size = 2) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-```{r}
-ggpairs(data = office, columns = c(7,14:16), 
-        aes(alpha = 0.5), size = 2) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-```{r}
-ggpairs(data = office, columns = c(7,17:19), 
-        aes(alpha = 0.5), size = 2) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-```{r}
-ggpairs(data = office, columns = c(7,20:23), 
-        aes(alpha = 0.5), size = 2) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-```{r}
-office$exGI = with(office, NegativityGI^2 +  PositivityGI^2)
-office$exHE = with(office, NegativityHE^2 + PositivityHE^2)
-office$LM = with(office, NegativityLM^2 + PositivityLM^2)
-```
-
-```{r}
-ggpairs(data = office, columns = c(7,24:26), 
-        aes(alpha = 0.5), size = 2) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-```{r}
-ggpairs(data = office, columns = c(7,10), 
-        aes(alpha = 0.5), size = 2) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
-
-
-
-
-```{r}
-mylm = lm(imdb_rating ~ wordHE, data = office)
-summary(mylm)
-```
-
-
-```{r}
-ggpairs(data = office, columns = c(7,28), 
-        aes(alpha = 0.5), color = "blue", size = 2) +
-   # scale_y_continuous(labels = comma) +
-   # scale_x_continuous(labels = comma) +
-    theme( 
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"),
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 12))
-```
 
