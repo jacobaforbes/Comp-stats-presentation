@@ -1,14 +1,20 @@
 ---
 title: "Bootstrap Methods and Applications"
-subtitle: "A data-based journey through two U.S. sitcoms"
+subtitle: "A data-based journey through a U.S. sitcom"
 author: "Jacob Forbes"
-date: "Friday, November 18, 2022"
+institute: "Sobes Research Group"
+#titlegraphic: "/users/jacob/Library/CloudStorage/OneDrive-Personal/Documents/UTK 22-25/Research/Template files/UT_CenteredLogo-RGB.png"
+fontsize: 10pt
 output:
-  beamer_presentation:
-    slide_level: 2
-    toc: true
-    theme: "Berlin"
-    colortheme: "dolphin"
+ beamer_presentation:
+    template: "/users/jacob/library/cloudstorage/onedrive-personal/documents/utk 22-25/research/svm-r-markdown-templates/svm-latex-beamer.tex"
+    keep_tex: false
+    latex_engine: pdflatex # pdflatex also works here
+    #dev: cairo_pdf # i typically comment this out  if latex_engine: pdflatex
+    slide_level: 3
+make149: true
+#mainfont: "open sans" # try out some font options if xelatex
+#titlefont: "titillium web" # try out some font options if xelatex
 ---
 
 ```{r setup, include=FALSE}
@@ -29,9 +35,9 @@ palette1 = "Set1"
 ```
 
 
-# Data exploration
+## Data exploration
 
-## Two TV shows
+### The sitcom
 
 We're going to explore data from a famous U.S. sitcom that aired from 2005 to 2013. Any guesses?
 
@@ -41,14 +47,14 @@ We're going to explore data from a famous U.S. sitcom that aired from 2005 to 20
 knitr::include_graphics('i2_office_poster.jpg')
 ```
 
-## The data
+### The data
 
 Our data come from the [\textcolor{blue}{The Office Episodes Data}](https://www.kaggle.com/datasets/bcruise/the-office-episodes-data) which is available on Kaggle. The data were read in as a data frame into `R` for analysis. Let's take a look at the columns we have available to work with.
 
 \pause
 
 \tiny
-```{r load_data}
+```{r load_data, fig.width = 10}
 # Load data
 dat = read.csv("office.csv")
 
@@ -57,12 +63,12 @@ dat$air_date = as.Date(dat$air_date, "%m/%d/%y")
 dat$season = as.factor(dat$season)
 
 # Show data structure
-str(dat, vec.len = 1.2, nchar.max = 64)
+str(dat, vec.len = 1.4, nchar.max = 96)
 ```
 
 \normalsize
 
-## U.S. viewership per episode
+### U.S. viewership per episode
 
 ```{r viewership, fig.height=6, fig.width = 10}
 ggplot(data = dat) +
@@ -79,7 +85,7 @@ ggplot(data = dat) +
         legend.text = element_text(size = 16))
 ```
 
-## Average IMDB rating per episode
+### Average IMDB rating per episode
 
 ```{r imdb_rating, fig.height=6, fig.width = 10}
 ggplot(data = dat) +
