@@ -1,0 +1,110 @@
+\headcommand {\slideentry {0}{0}{1}{1/1}{}{0}}
+\headcommand {\beamer@framepages {1}{1}}
+\headcommand {\slideentry {0}{0}{2}{2/2}{}{0}}
+\headcommand {\beamer@framepages {2}{2}}
+\headcommand {\beamer@sectionpages {1}{2}}
+\headcommand {\beamer@subsectionpages {1}{2}}
+\headcommand {\sectionentry {1}{Data}{3}{Data}{0}}
+\headcommand {\beamer@subsectionpages {3}{2}}
+\headcommand {\beamer@subsectionentry {0}{1}{1}{3}{Introduce the data}}
+\headcommand {\slideentry {1}{1}{1}{3/4}{Introduce the data}{0}}
+\headcommand {\beamer@framepages {3}{4}}
+\headcommand {\slideentry {1}{1}{2}{5/6}{Introduce the data}{0}}
+\headcommand {\beamer@framepages {5}{6}}
+\headcommand {\slideentry {1}{1}{3}{7/7}{Introduce the data}{0}}
+\headcommand {\beamer@framepages {7}{7}}
+\headcommand {\beamer@subsectionpages {3}{7}}
+\headcommand {\beamer@subsectionentry {0}{1}{2}{8}{Explore the data}}
+\headcommand {\slideentry {1}{2}{1}{8/8}{Explore the data}{0}}
+\headcommand {\beamer@framepages {8}{8}}
+\headcommand {\slideentry {1}{2}{2}{9/9}{Explore the data}{0}}
+\headcommand {\beamer@framepages {9}{9}}
+\headcommand {\slideentry {1}{2}{3}{10/10}{Explore the data}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\slideentry {1}{2}{4}{11/11}{Explore the data}{0}}
+\headcommand {\beamer@framepages {11}{11}}
+\headcommand {\beamer@sectionpages {3}{11}}
+\headcommand {\beamer@subsectionpages {8}{11}}
+\headcommand {\sectionentry {2}{Bootstrap methods with IMDB ratings}{12}{Bootstrap methods with IMDB ratings}{0}}
+\headcommand {\slideentry {2}{0}{1}{12/12}{}{0}}
+\headcommand {\beamer@framepages {12}{12}}
+\headcommand {\slideentry {2}{0}{2}{13/14}{}{0}}
+\headcommand {\beamer@framepages {13}{14}}
+\headcommand {\slideentry {2}{0}{3}{15/15}{}{0}}
+\headcommand {\beamer@framepages {15}{15}}
+\headcommand {\beamer@subsectionpages {12}{15}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{16}{Permutation tests for comparing groups}}
+\headcommand {\slideentry {2}{1}{1}{16/17}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {16}{17}}
+\headcommand {\slideentry {2}{1}{2}{18/18}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {18}{18}}
+\headcommand {\slideentry {2}{1}{3}{19/19}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {19}{19}}
+\headcommand {\slideentry {2}{1}{4}{20/20}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {20}{20}}
+\headcommand {\slideentry {2}{1}{5}{21/24}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {21}{24}}
+\headcommand {\slideentry {2}{1}{6}{25/26}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {25}{26}}
+\headcommand {\slideentry {2}{1}{7}{27/29}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {27}{29}}
+\headcommand {\slideentry {2}{1}{8}{30/31}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {30}{31}}
+\headcommand {\slideentry {2}{1}{9}{32/36}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {32}{36}}
+\headcommand {\slideentry {2}{1}{10}{37/44}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {37}{44}}
+\headcommand {\slideentry {2}{1}{11}{45/46}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {45}{46}}
+\headcommand {\slideentry {2}{1}{12}{47/48}{Permutation tests for comparing groups}{0}}
+\headcommand {\beamer@framepages {47}{48}}
+\headcommand {\beamer@subsectionpages {16}{48}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{49}{Standard error approximation for sample correlation}}
+\headcommand {\slideentry {2}{2}{1}{49/49}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {49}{49}}
+\headcommand {\slideentry {2}{2}{2}{50/50}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {50}{50}}
+\headcommand {\slideentry {2}{2}{3}{51/51}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {51}{51}}
+\headcommand {\slideentry {2}{2}{4}{52/52}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {52}{52}}
+\headcommand {\slideentry {2}{2}{5}{53/53}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {53}{53}}
+\headcommand {\slideentry {2}{2}{6}{54/54}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {54}{54}}
+\headcommand {\slideentry {2}{2}{7}{55/58}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {55}{58}}
+\headcommand {\slideentry {2}{2}{8}{59/59}{Standard error approximation for sample correlation}{0}}
+\headcommand {\beamer@framepages {59}{59}}
+\headcommand {\beamer@sectionpages {12}{59}}
+\headcommand {\beamer@subsectionpages {49}{59}}
+\headcommand {\sectionentry {3}{Conclusion}{60}{Conclusion}{0}}
+\headcommand {\beamer@subsectionpages {60}{59}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{60}{Pros and cons of bootstrap methods}}
+\headcommand {\slideentry {3}{1}{1}{60/61}{Pros and cons of bootstrap methods}{0}}
+\headcommand {\beamer@framepages {60}{61}}
+\headcommand {\slideentry {3}{1}{2}{62/62}{Pros and cons of bootstrap methods}{0}}
+\headcommand {\beamer@framepages {62}{62}}
+\headcommand {\slideentry {3}{1}{3}{63/64}{Pros and cons of bootstrap methods}{0}}
+\headcommand {\beamer@framepages {63}{64}}
+\headcommand {\beamer@subsectionpages {60}{64}}
+\headcommand {\beamer@subsectionentry {0}{3}{2}{65}{Bootstrapping in ATARI}}
+\headcommand {\slideentry {3}{2}{1}{65/67}{Bootstrapping in ATARI}{0}}
+\headcommand {\beamer@framepages {65}{67}}
+\headcommand {\slideentry {3}{2}{2}{68/68}{Bootstrapping in ATARI}{0}}
+\headcommand {\beamer@framepages {68}{68}}
+\headcommand {\slideentry {3}{2}{3}{69/69}{Bootstrapping in ATARI}{0}}
+\headcommand {\beamer@framepages {69}{69}}
+\headcommand {\slideentry {3}{2}{4}{70/70}{Bootstrapping in ATARI}{0}}
+\headcommand {\beamer@framepages {70}{70}}
+\headcommand {\slideentry {3}{2}{5}{71/71}{Bootstrapping in ATARI}{0}}
+\headcommand {\beamer@framepages {71}{71}}
+\headcommand {\beamer@subsectionpages {65}{71}}
+\headcommand {\beamer@subsectionentry {0}{3}{3}{72}{Questions}}
+\headcommand {\slideentry {3}{3}{1}{72/72}{Questions}{0}}
+\headcommand {\beamer@framepages {72}{72}}
+\headcommand {\beamer@partpages {1}{72}}
+\headcommand {\beamer@subsectionpages {72}{72}}
+\headcommand {\beamer@sectionpages {60}{72}}
+\headcommand {\beamer@documentpages {72}}
+\headcommand {\gdef \inserttotalframenumber {41}}

@@ -1,0 +1,10 @@
+\beamer@sectionintoc {1}{Data}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Introduce the data}{3}{0}{1}
+\beamer@subsectionintoc {1}{2}{Explore the data}{8}{0}{1}
+\beamer@sectionintoc {2}{Bootstrap methods with IMDB ratings}{12}{0}{2}
+\beamer@subsectionintoc {2}{1}{Permutation tests for comparing groups}{16}{0}{2}
+\beamer@subsectionintoc {2}{2}{Standard error approximation for sample correlation}{49}{0}{2}
+\beamer@sectionintoc {3}{Conclusion}{60}{0}{3}
+\beamer@subsectionintoc {3}{1}{Pros and cons of bootstrap methods}{60}{0}{3}
+\beamer@subsectionintoc {3}{2}{Bootstrapping in ATARI}{65}{0}{3}
+\beamer@subsectionintoc {3}{3}{Questions}{72}{0}{3}

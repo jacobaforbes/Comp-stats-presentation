@@ -214,3 +214,236 @@ summary(mod3)
 plot(mod3)
 ```
 
+
+
+# Statistical analysis
+
+## Sandbox total IMDB
+```{r, fig.height=6, fig.width = 10}
+# Add column
+dat$total_imdb_points = with(dat, imdb_rating * total_votes)
+
+# Create plot
+ggplot(data = dat) +
+  geom_point(aes(x = air_date, y = total_imdb_points, col = show), size = 2) +
+  labs(
+    x = "Episode air date\n",
+  ) +
+  scale_y_continuous(name="Total IMDB rating points", labels = comma) +
+  theme(legend.position="top", 
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        legend.title = element_text(size = 18, face = "bold"),
+        legend.text = element_text(size = 16))
+```
+
+## Sandbox total IMDB
+
+```{r, fig.height=6, fig.width = 10}
+ggplot(data = dat, aes(x = total_imdb_points, fill = show)) +
+  geom_density(alpha = 0.7) +
+  labs(
+    y = "Density"
+  ) +
+  scale_x_continuous(name="Total IMDB rating points", labels = comma) +
+  theme(legend.position="top", 
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        legend.title = element_text(size = 18, face = "bold"),
+        legend.text = element_text(size = 16))
+```
+
+## Sandbox pairs
+```{r pairs_plot_2, fig.height=6, fig.width = 10}
+ggpairs(data = dat, columns = c(7, 8, 10), 
+        aes(color = show, alpha = 0.5), size = 2, 
+        upper = list(continuous = "points"),
+        columnLabels = c("Average IMDB rating", "Number of IMDB ratings", "Total IMDB rating points")) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+## Sandbox description 
+
+```{r, fig.height=6, fig.width = 10}
+dat$des_length = nchar(dat$description)
+
+# Create plot
+ggplot(data = dat) +
+  geom_point(aes(x = air_date, y = des_length, col = show), size = 2) +
+  labs(
+    x = "Episode air date\n",
+  ) +
+  scale_y_continuous(name="Character length of episode description", labels = comma) +
+  theme(legend.position="top", 
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        legend.title = element_text(size = 18, face = "bold"),
+        legend.text = element_text(size = 16))
+```
+
+
+## Sandbox description pairs
+```{r pairs_plot_3, fig.height=6, fig.width = 10}
+ggpairs(data = dat, columns = c(7, 8, 11), 
+        aes(color = show, alpha = 0.5), size = 2, 
+        upper = list(continuous = "points"),
+        columnLabels = c("Average IMDB rating", "Number of IMDB ratings", "Episode description length")) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+## Sandbox description 
+
+```{r, fig.height=6, fig.width = 10}
+# Build sentiment model
+sentiment = analyzeSentiment(dat$description)
+dat$sentiment = sentiment$SentimentGI
+
+# Create plot
+ggplot(data = dat) +
+  geom_point(aes(x = air_date, y = sentiment, col = show), size = 2) +
+  labs(
+    x = "Episode air date\n",
+  ) +
+  scale_y_continuous(name="Sentiment score", labels = comma) +
+  theme(legend.position="top", 
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        legend.title = element_text(size = 18, face = "bold"),
+        legend.text = element_text(size = 16))
+```
+
+## Sandbox sentiment score
+```{r, fig.height=6, fig.width = 10}
+ggpairs(data = dat, columns = c(7, 8, 12), 
+        aes(color = show, alpha = 0.5), size = 2, 
+        upper = list(continuous = "points"),
+        columnLabels = c("Average IMDB rating", "Number of IMDB ratings", "Sentiment score")) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+
+## Linear model
+```{r}
+samod = lm(imdb_rating ~ sentiment, data = dat)
+summary(samod)
+dat[which.max(dat$sentiment), 9]
+dat[which.min(dat$sentiment), 9]
+```
+
+```{r}
+ggpairs(data = office, columns = c(7,11:13), 
+        aes(alpha = 0.5), size = 2) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+```{r}
+ggpairs(data = office, columns = c(7,14:16), 
+        aes(alpha = 0.5), size = 2) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+```{r}
+ggpairs(data = office, columns = c(7,17:19), 
+        aes(alpha = 0.5), size = 2) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+```{r}
+ggpairs(data = office, columns = c(7,20:23), 
+        aes(alpha = 0.5), size = 2) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+```{r}
+office$exGI = with(office, NegativityGI^2 +  PositivityGI^2)
+office$exHE = with(office, NegativityHE^2 + PositivityHE^2)
+office$LM = with(office, NegativityLM^2 + PositivityLM^2)
+```
+
+```{r}
+ggpairs(data = office, columns = c(7,24:26), 
+        aes(alpha = 0.5), size = 2) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+```{r}
+ggpairs(data = office, columns = c(7,10), 
+        aes(alpha = 0.5), size = 2) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
+
+
+
+```{r}
+mylm = lm(imdb_rating ~ wordHE, data = office)
+summary(mylm)
+```
+
+
+```{r}
+ggpairs(data = office, columns = c(7,28), 
+        aes(alpha = 0.5), color = "blue", size = 2) +
+   # scale_y_continuous(labels = comma) +
+   # scale_x_continuous(labels = comma) +
+    theme( 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+```
+
